@@ -1,0 +1,69 @@
+* {
+  font-family: "Open Sans", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+  font-weight: 900;
+}
+
+body {
+  background-color: #f3f3f7;
+  margin: 0;
+  padding: 0;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+a:link {
+  color: #ff4661;
+}
+
+/* visited link */
+a:visited {
+  color: #ff4661;
+}
+
+/* mouse over link */
+a:hover {
+  color: #ff4661;
+}
+
+/* selected link */
+a:active {
+  color: #ff4661;
+}
+
+h2 {
+  color: #ff4661;
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 0.25rem;
+}
+
+label {
+  color: #ff4661;
+  padding: 0.5rem;
+}
+
+input {
+  background-color: #f3f3f7;
+  border: 2px solid #ff4661;
+  color: #ff4661;
+  margin: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+button {
+  background-color: #f3f3f7;
+  border: 2px solid #ff4661;
+  color: #ff4661;
+  padding: 0.5rem;
+  margin: 0.25rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
