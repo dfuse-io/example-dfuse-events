@@ -1,5 +1,13 @@
 .App {
   text-align: center;
+  flex-grow: 1;
+  box-sizing: border-box;
+}
+
+.App-container {
+  width: 100%;
+  padding: 16px;
+  box-sizing: border-box;
 }
 
 .App-header {
@@ -24,7 +32,7 @@
 }
 
 .App-infinite-container {
-  border: 2px solid #ff4661;
+  border: 2px solid #eee;
   padding: 0.75rem 0.5rem;
   height: 400px;
   overflow-x: hidden;
@@ -45,4 +53,9 @@
   margin: 0 0;
   font-size: 1rem;
   text-align: left;
+}
+
+.App .App-container .App-no-padding-x {
+  padding-left: 0;
+  padding-right: 0;
 }

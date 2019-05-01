@@ -3,10 +3,12 @@ import { Config } from "./config"
 
 import "./App.css"
 import { createDfuseHooksEventTransaction } from "./transaction"
-import {SearchList} from "./components/search-list";
-
-
-
+import { SearchList } from "./components/search-list"
+import Button from "@material-ui/core/Button/Button"
+import TextField from "@material-ui/core/TextField/TextField"
+import Grid from "@material-ui/core/Grid/Grid"
+import createMuiTheme from "@material-ui/core/styles/createMuiTheme"
+import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider"
 
 type Props = {
   ual: any
@@ -21,6 +23,34 @@ type State = {
   key: string
   data: string
 }
+
+// @ts-ignore
+const theme = createMuiTheme({
+  palette: {
+    primary: { main: "#ff4660" }
+  },
+  typography: { useNextVariants: true },
+  overrides: {
+    MuiButton: {
+      containedPrimary: {
+        paddingLeft: "40px",
+        paddingRight: "40px",
+        boxShadow: "none",
+        textTransform: "none",
+
+        "&:active": {
+          boxShadow: "none"
+        },
+        "&:focus": {
+          boxShadow: "0 0 0 0.2rem rgba(0,123,255,.5)"
+        }
+      },
+      label: {
+        fontWeight: 600
+      }
+    }
+  }
+})
 
 class App extends React.Component<Props, State> {
   state: State = {
@@ -40,10 +70,6 @@ class App extends React.Component<Props, State> {
     } else if (!activeUser && this.state.activeUser) {
       this.setState({ activeUser: undefined })
     }
-  }
-
-  onKeyUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ key: event.target.value })
   }
 
   onDataUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,12 +99,9 @@ class App extends React.Component<Props, State> {
       this.setState({ streamResults: true })
 
       const transaction = createDfuseHooksEventTransaction(accountName!, key, data)
-      console.log(transaction)
-      console.log(activeUser)
-      const response = await activeUser.signTransaction(transaction, { broadcast: true })
-      console.log(response)
+      const signedTransaction = await activeUser.signTransaction(transaction, { broadcast: true })
 
-      this.setState({ transactionId: response.transactionId })
+      this.setState({ transactionId: signedTransaction.transactionId })
     } catch (error) {
       console.log("An error occurred while trying to push transaction", error)
     }
@@ -86,45 +109,51 @@ class App extends React.Component<Props, State> {
 
   renderForm() {
     return (
-      <React.Fragment>
-        <h2>dfuse Events</h2>
-        <form className="App-form">
-          <div>
-            <label>
-              Key:
-              <input type="text" name="key" className="App-key-field" onChange={this.onKeyUpdate} />
-            </label>
-          </div>
-          <div>
-            <label>
-              Data:
-              <input
+      <Grid sm={4} item={true}>
+        <div style={{ padding: 12 }}>
+          <Grid container={true} spacing={24} direction="column">
+            <Grid className="App-no-padding-x" item={true} sm={12}>
+              <h2 style={{ textAlign: "left" }}>dfuse events</h2>
+            </Grid>
+            <Grid className="App-no-padding-x" item={true} sm={12}>
+              <TextField
+                fullWidth={true}
+                label="Data"
+                variant="outlined"
                 type="text"
                 name="data"
-                className="App-data-field"
                 onChange={this.onDataUpdate}
               />
-            </label>
-          </div>
-          <div>
-            <input
-              className="App-button"
-              type="submit"
-              value="Submit"
-              onClick={this.onPushTransaction}
-            />
-          </div>
-        </form>
-      </React.Fragment>
+            </Grid>
+            <Grid
+              className="App-no-padding-x"
+              item={true}
+              style={{ textAlign: "left" }}
+              sm={12}
+            >
+              <Button
+                color="primary"
+                variant="contained"
+                type="submit"
+                onClick={this.onPushTransaction}
+              >
+                Submit
+              </Button>
+            </Grid>
+          </Grid>
+        </div>
+      </Grid>
     )
   }
 
   renderTransaction() {
     const { transactionId } = this.state
-
+    if (!transactionId) {
+      return null
+    }
     return (
       <a target="_blank" href={`${Config.chainApiProtocol}://kylin.eosq.app/tx/${transactionId}`}>
-        {transactionId}
+        See it on eosq
       </a>
     )
   }
@@ -165,13 +194,11 @@ class App extends React.Component<Props, State> {
   }
 
   renderResult = (result: any, index: number) => {
-    const traces = result.searchTransactionsForward.trace
-    const matchingAction = traces.matchingActions[0]
+    const trace = result.searchTransactionsForward.trace
+    const matchingAction = trace.matchingActions[0]
 
-
-
-    const prefixTrxId = traces.id.slice(0, 8)
-    const suffixTrxId = traces.id.slice(-8)
+    const prefixTrxId = trace.id.slice(0, 8)
+    const suffixTrxId = trace.id.slice(-8)
 
     return (
       <code key={index} className="App-transfer">
@@ -190,7 +217,7 @@ class App extends React.Component<Props, State> {
     if (matching.length === 0) {
       return (
         <code key="not-found" className="App-transfer">
-          Transaction not found, still looking for it
+          Waiting for transaction...
         </code>
       )
     }
@@ -201,13 +228,17 @@ class App extends React.Component<Props, State> {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          {this.renderForm()}
-          <main className="App-main">
-            {this.renderTransaction()}
-            {this.renderSearchResults()}
-          </main>
-        </header>
+        <MuiThemeProvider theme={theme}>
+          <div className="App-container">
+            <Grid container={true} spacing={32}>
+              {this.renderForm()}
+              <Grid xs={8} item={true}>
+                {this.renderTransaction()}
+                {this.renderSearchResults()}
+              </Grid>
+            </Grid>
+          </div>
+        </MuiThemeProvider>
       </div>
     )
   }
