@@ -1,5 +1,4 @@
 import * as React from "react"
-import { Config } from "./config"
 
 import "./App.css"
 import { createDfuseHooksEventTransaction } from "./transaction"
@@ -113,7 +112,7 @@ class App extends React.Component<Props, State> {
         <div style={{ padding: 12 }}>
           <Grid container={true} spacing={24} direction="column">
             <Grid className="App-no-padding-x" item={true} sm={12}>
-              <h2 style={{ textAlign: "left" }}>dfuse events</h2>
+              <h2 style={{ textAlign: "left" }}>dfuse Events</h2>
             </Grid>
             <Grid className="App-no-padding-x" item={true} sm={12}>
               <TextField
@@ -125,12 +124,7 @@ class App extends React.Component<Props, State> {
                 onChange={this.onDataUpdate}
               />
             </Grid>
-            <Grid
-              className="App-no-padding-x"
-              item={true}
-              style={{ textAlign: "left" }}
-              sm={12}
-            >
+            <Grid className="App-no-padding-x" item={true} style={{ textAlign: "left" }} sm={12}>
               <Button
                 color="primary"
                 variant="contained"
@@ -147,22 +141,11 @@ class App extends React.Component<Props, State> {
   }
 
   renderTransaction() {
-    const { transactionId } = this.state
-    if (!transactionId) {
-      return null
-    }
-    return (
-      <a target="_blank" href={`${Config.chainApiProtocol}://kylin.eosq.app/tx/${transactionId}`}>
-        See it on eosq
-      </a>
-    )
+   return null
+
   }
 
-  renderSearchResults = () => {
-    if (!this.state.streamResults) {
-      return null
-    }
-
+  dataToQuery() {
     const { data } = this.state
     const entries = data.split("&")
     const searchFields = entries.map((entry) => {
@@ -171,7 +154,15 @@ class App extends React.Component<Props, State> {
       return `event.${parts[0]}:${parts[1]}`
     })
 
-    const query = searchFields.join(" ")
+    return searchFields.join(" ")
+  }
+
+  renderSearchResults = () => {
+    if (!this.state.streamResults) {
+      return null
+    }
+
+    const query = this.dataToQuery()
 
     return (
       <div className="App-infinite-container">
@@ -186,14 +177,14 @@ class App extends React.Component<Props, State> {
   }
 
   renderLoading = () => {
-    return <h2>Loading ....</h2>
+    return <h2>Pushing transaction...</h2>
   }
 
   renderError = (error: any) => {
     return <h2>Error!</h2>
   }
 
-  renderResult = (result: any, index: number) => {
+  renderResultCode(result: any, index: number) {
     const trace = result.searchTransactionsForward.trace
     const matchingAction = trace.matchingActions[0]
 
@@ -204,8 +195,58 @@ class App extends React.Component<Props, State> {
       <code key={index} className="App-transfer">
         {`${matchingAction.account}:${matchingAction.name} - ${JSON.stringify(
           matchingAction.json
-        )} (${prefixTrxId}...${suffixTrxId})`}
+        )}`}
+        <a
+          style={{ paddingLeft: "5px" }}
+          href={`https://kylin.eosq.app/tx/${trace.id}`}
+        >{`(${prefixTrxId}...${suffixTrxId})`}</a>
       </code>
+    )
+  }
+
+  renderQuery() {
+    const query = this.dataToQuery()
+
+    return (
+      <div style={{ textAlign: "left" }}>
+        <a href={`https://kylin.eosq.app/search?q=${encodeURIComponent(query)}`}>{query}</a>
+      </div>
+    )
+  }
+
+  renderResult = (result: any, index: number) => {
+    return (
+      <div style={{ fontWeight: 800 }}>
+        <div style={{ textAlign: "left" }}>Here is the transaction we found:</div>
+        {this.renderResultCode(result, index)}
+        <br />
+        <div style={{ textAlign: "left" }}>
+          Here is the SQE query we use to find the transaction:
+        </div>
+        {this.renderQuery()}
+        <br />
+        <div style={{ textAlign: "left" }}>
+          Here is the sample code you need in your smart contract to activate your dfuse event
+          indexing:
+        </div>
+        <div style={{ textAlign: "left" }}>{this.renderSCCode()}</div>
+        <br />
+        <div style={{ textAlign: "left" }}>Refer to dfuse Events documentation for further details</div>
+      </div>
+    )
+  }
+
+  renderSCCode() {
+    const query = this.dataToQuery()
+    return (
+      <pre style={ { fontWeight: 500 }}>
+        {`eosio::action(
+  std::vector<permission_level>(),
+  "dfuseiohooks"_n,
+  "event"_n,
+  std::make_tuple(std::string(""), std::string("${query}"))
+).send_context_free();`}
+      </pre>
     )
   }
 
