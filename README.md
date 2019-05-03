@@ -29,7 +29,7 @@ import { createDfuseClient } from "@dfuse/client";
 
 const dfuseClient = createDfuseClient({
   network: "kylin",
-  apiKey: "web_24415c0a0b108b4096a8640234aa5303"
+  apiKey: "<your-api-key>"
 });
 
 const wsLink = new WebSocketLink({
