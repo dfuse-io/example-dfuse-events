@@ -1,10 +1,10 @@
-# WORK IN PROGRESS PLEASE CHECK AGAIN LATER
+
 
 # Get started with dfuse.io GraphQL API using REACT
 
-# Stream action rates example
+### dfuse Events example
 
-This example demonstrates how to use the dfuseiohooks contract to index data fields in your smart contract.
+This example demonstrates how to use `push_transaction` to the dfuseiohooks contract to index data fields in your smart contract. For more context, you can refer to the [contract example](https://github.com/dfuse-io/example-dfuse-events-contract).
 
 ### Token management
 
@@ -229,6 +229,13 @@ renderResults = (messages: any[]) => {
 ```
 
 For the complete example, you can refer to the source code of this project.
+
+### Query indexed fields with dfuse search API
+
+Now that the action has been indexed, you can easily search for those only actions you are interested in.
+
+- Search all move action that had `fieldName1` set to `foo` and `fieldName2` set to `bar` (using format example from above) with `event.fieldName1:foo event.fieldName2:bar parent.receiver:yourcontract`.
+
 
 # Quick start to run the example
 
