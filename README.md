@@ -236,6 +236,8 @@ Now that the action has been indexed, you can easily search for those only actio
 
 - Search all move action that had `fieldName1` set to `foo` and `fieldName2` set to `bar` (using format example from above) with `event.fieldName1:foo event.fieldName2:bar parent.receiver:yourcontract`.
 
+Important The parent.receiver:<contract> should always be used to ensure that it was really your <contract> that sent the inline action. You would not like someone doing the same card_id=123&card_kind=club fields indexing to be included in your search's results!
+
 
 # Quick start to run the example
 
