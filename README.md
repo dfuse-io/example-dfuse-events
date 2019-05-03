@@ -1,6 +1,6 @@
 
 
-# Get started with dfuse.io GraphQL API using REACT
+# Get started with dfuse Events using REACT and Scatter
 
 ### dfuse Events example
 
