@@ -5,7 +5,7 @@ EOS smart contract leveraging dfuse Events to control indexing
 of those transactions within dfuse Search.
 
 The general idea behind dfuse Events is to send an inline context-free
-action `dfuseiohooks:event(events_key, url_encoded_fields)` acting
+action `dfuseiohooks:event(auth_key, url_encoded_fields)` acting
 as a marker for dfuse Search to index the calling action (your
 contract's action) based value in the `url_encoded_fields` parameter.
 
@@ -27,10 +27,10 @@ sends an inline context-free action `dfuseiohooks:event`.
 The inline context-free action parameters must be provided using
 a strict pre-defined format to be correctly indexed by dfuse Search.
 
-The first parameter `events_key` is a string that must be the empty string
+The first parameter `auth_key` is a string that must be the empty string
 `""` or a currently valid dfuse Events key that we
 can provide to you to lift built-in indexing limits (max
-3 fields, max of 32 characters per field's name, max 64 characters
+3 fields, max of 16 characters per field's name, max 64 characters
 per field's value).
 
 **Note** Contact us directly to request a dfuse Events key.
@@ -67,7 +67,7 @@ received and second key/value pair being the `pet_kind:<pet_kind>`
 received.
 
 When your transaction will be accepted by the blockchain, dfuse Search
-will be notified, it will first check the `events_key` parameter of the
+will be notified, it will first check the `auth_key` parameter of the
 `dfuseiohooks:event` inline action to ensures it the empty string
 or a valid dfuse Events key to decide of which indexing restrictions to apply.
 
