@@ -11,7 +11,7 @@ void eospetgameio::train(
         "dfuseiohooks"_n,
         "event"_n,
         std::make_tuple(
-            // Parameter `auth_keu`
+            // Parameter `auth_key`
             std::string(""),
             // Parameter `data` (ensures to escape `&` and `=` in values if you use user-provided strings!)
             std::string("pet_id=" + pet_id.to_string() + "&pet_kind=" + pet_kind)
