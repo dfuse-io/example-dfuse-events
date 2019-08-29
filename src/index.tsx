@@ -14,7 +14,7 @@ import { Config } from "./config"
 import "./index.css"
 
 // Make sure to get your own API key at https://dfuse.io -- this test key will only work for one hour
-const dfuseClient = createDfuseClient({ network: "kylin", apiKey: "web_24415c0a0b108b4096a8640234aa5303" })
+const dfuseClient = createDfuseClient({ network: "kylin", apiKey: "web_ddaf4dcba8fd11d0f52566a27b4ffc1e" })
 
 const wsLink = new WebSocketLink({
   uri: `wss://kylin.eos.dfuse.io/graphql`,
